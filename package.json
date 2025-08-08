@@ -4,10 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
-    "start": "next start",
-    "lint": "next lint",
-    "deploy": "npm run build && gh-pages -d out"
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",
