@@ -1,0 +1,237 @@
+"use client"
+
+import { createContext, useContext, useMemo, useState } from "react"
+
+export type Lang = "en" | "id" | "zh" | "ja"
+
+const dictionaries: Record<Lang, Record<string, string>> = {
+    en: {
+        playlist: "Playlist",
+        playlistsTitle: "Your Playlists",
+        newPlaylist: "New Playlist",
+        playlistName: "Playlist name",
+        selectPlaylist: "Select playlist",
+        create: "Create",
+        noPlaylistsYet: "No playlists yet",
+        noTracksInPlaylist: "This playlist is empty",
+        addTrack: "Add Track",
+        title: "Title",
+        titlePlaceholder: "Song title",
+        artist: "Artist",
+        artistPlaceholder: "Artist name",
+        localFile: "Local file",
+        addLocal: "Add local file",
+        onlyLocalInfo: "Upload from your device only (URLs are disabled).",
+        play: "Play",
+        pause: "Pause",
+        prev: "Previous",
+        next: "Next",
+        shuffle: "Shuffle",
+        repeat: "Repeat",
+        repeatOff: "Repeat Off",
+        repeatAll: "Repeat All",
+        repeatOne: "Repeat One",
+        volume: "Volume",
+        mute: "Mute",
+        unmute: "Unmute",
+        seek: "Seek",
+        tip: "Tip: Your uploads are stored per account in a dedicated directory.",
+        noTrack: "No track",
+        noArtist: "Unknown artist",
+        unknown: "—",
+        language: "Language",
+        local: "Local",
+        signOut: "Sign out",
+        // new
+        delete: "Delete",
+        deleteTrack: "Delete track",
+        deletePlaylist: "Delete playlist",
+        removeFromPlaylist: "Remove from playlist",
+        confirmDeleteTrackTitle: "Delete this track?",
+        confirmDeletePlaylistTitle: "Delete this playlist?",
+        actionCannotBeUndone: "This action cannot be undone.",
+        cancel: "Cancel",
+        confirm: "Confirm",
+    },
+    id: {
+        playlist: "Daftar Lagu",
+        playlistsTitle: "Playlist Anda",
+        newPlaylist: "Playlist Baru",
+        playlistName: "Nama playlist",
+        selectPlaylist: "Pilih playlist",
+        create: "Buat",
+        noPlaylistsYet: "Belum ada playlist",
+        noTracksInPlaylist: "Playlist ini kosong",
+        addTrack: "Tambah Lagu",
+        title: "Judul",
+        titlePlaceholder: "Judul lagu",
+        artist: "Artis",
+        artistPlaceholder: "Nama artis",
+        localFile: "File lokal",
+        addLocal: "Tambah file lokal",
+        onlyLocalInfo: "Hanya unggah dari perangkat Anda (URL dinonaktifkan).",
+        play: "Putar",
+        pause: "Jeda",
+        prev: "Sebelumnya",
+        next: "Berikutnya",
+        shuffle: "Acak",
+        repeat: "Ulang",
+        repeatOff: "Ulang Mati",
+        repeatAll: "Ulang Semua",
+        repeatOne: "Ulang Satu",
+        volume: "Volume",
+        mute: "Bisukan",
+        unmute: "Bunyikan",
+        seek: "Geser",
+        tip: "Tips: Unggahan Anda disimpan per akun di direktori khusus.",
+        noTrack: "Tidak ada lagu",
+        noArtist: "Artis tidak diketahui",
+        unknown: "—",
+        language: "Bahasa",
+        local: "Lokal",
+        signOut: "Keluar",
+        // new
+        delete: "Hapus",
+        deleteTrack: "Hapus lagu",
+        deletePlaylist: "Hapus playlist",
+        removeFromPlaylist: "Hapus dari playlist",
+        confirmDeleteTrackTitle: "Hapus lagu ini?",
+        confirmDeletePlaylistTitle: "Hapus playlist ini?",
+        actionCannotBeUndone: "Tindakan ini tidak dapat dibatalkan.",
+        cancel: "Batal",
+        confirm: "Konfirmasi",
+    },
+    zh: {
+        playlist: "播放列表",
+        playlistsTitle: "你的播放列表",
+        newPlaylist: "新建播放列表",
+        playlistName: "播放列表名称",
+        selectPlaylist: "选择播放列表",
+        create: "创建",
+        noPlaylistsYet: "还没有播放列表",
+        noTracksInPlaylist: "该播放列表为空",
+        addTrack: "添加歌曲",
+        title: "标题",
+        titlePlaceholder: "歌曲标题",
+        artist: "艺人",
+        artistPlaceholder: "艺人名称",
+        localFile: "本地文件",
+        addLocal: "添加本地文件",
+        onlyLocalInfo: "仅从你的设备上传（禁用链接）。",
+        play: "播放",
+        pause: "暂停",
+        prev: "上一首",
+        next: "下一首",
+        shuffle: "随机",
+        repeat: "循环",
+        repeatOff: "关闭循环",
+        repeatAll: "全部循环",
+        repeatOne: "单曲循环",
+        volume: "音量",
+        mute: "静音",
+        unmute: "取消静音",
+        seek: "进度",
+        tip: "提示：你的上传按账户存储在独立目录中。",
+        noTrack: "无曲目",
+        noArtist: "未知艺人",
+        unknown: "—",
+        language: "语言",
+        local: "本地",
+        signOut: "退出登录",
+        // new
+        delete: "删除",
+        deleteTrack: "删除歌曲",
+        deletePlaylist: "删除播放列表",
+        removeFromPlaylist: "从播放列表移除",
+        confirmDeleteTrackTitle: "删除这首歌？",
+        confirmDeletePlaylistTitle: "删除这个播放列表？",
+        actionCannotBeUndone: "此操作无法撤销。",
+        cancel: "取消",
+        confirm: "确认",
+    },
+    ja: {
+        playlist: "プレイリスト",
+        playlistsTitle: "あなたのプレイリスト",
+        newPlaylist: "新規プレイリスト",
+        playlistName: "プレイリスト名",
+        selectPlaylist: "プレイリストを選択",
+        create: "作成",
+        noPlaylistsYet: "まだプレイリストがありません",
+        noTracksInPlaylist: "このプレイリストは空です",
+        addTrack: "曲を追加",
+        title: "タイトル",
+        titlePlaceholder: "曲名",
+        artist: "アーティスト",
+        artistPlaceholder: "アーティスト名",
+        localFile: "ローカルファイル",
+        addLocal: "ローカルを追加",
+        onlyLocalInfo: "デバイスからのアップロードのみ（URLは無効）。",
+        play: "再生",
+        pause: "一時停止",
+        prev: "前へ",
+        next: "次へ",
+        shuffle: "シャッフル",
+        repeat: "リピート",
+        repeatOff: "リピートなし",
+        repeatAll: "全曲リピート",
+        repeatOne: "1曲リピート",
+        volume: "音量",
+        mute: "ミュート",
+        unmute: "ミュート解除",
+        seek: "シーク",
+        tip: "ヒント：アップロードはアカウントごとの専用ディレクトリに保存されます。",
+        noTrack: "曲なし",
+        noArtist: "不明なアーティスト",
+        unknown: "—",
+        language: "言語",
+        local: "ローカル",
+        signOut: "ログアウト",
+        // new
+        delete: "削除",
+        deleteTrack: "曲を削除",
+        deletePlaylist: "プレイリストを削除",
+        removeFromPlaylist: "プレイリストから削除",
+        confirmDeleteTrackTitle: "この曲を削除しますか？",
+        confirmDeletePlaylistTitle: "このプレイリストを削除しますか？",
+        actionCannotBeUndone: "この操作は元に戻せません。",
+        cancel: "キャンセル",
+        confirm: "確認",
+    },
+}
+
+type I18nContextValue = {
+    lang: Lang
+    setLang: (l: Lang) => void
+    t: (k: string) => string
+}
+
+const I18nContext = createContext<I18nContextValue>({
+    lang: "id",
+    setLang: () => { },
+    t: (k) => k,
+})
+
+export function LanguageProvider({
+    children,
+    initialLang = "id",
+    onLangChange,
+}: {
+    children: React.ReactNode
+    initialLang?: Lang
+    onLangChange?: (l: Lang) => void
+}) {
+    const [lang, setLangState] = useState<Lang>(initialLang)
+    const setLang = useMemo(
+        () => (l: Lang) => {
+            setLangState((prev) => (prev === l ? prev : l))
+            onLangChange?.(l)
+        },
+        [onLangChange]
+    )
+    const value = useMemo<I18nContextValue>(() => ({ lang, setLang, t: (k: string) => dictionaries[lang][k] ?? k }), [lang, setLang])
+    return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
+}
+
+export function useI18n() {
+    return useContext(I18nContext)
+}
